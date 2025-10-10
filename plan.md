@@ -79,7 +79,15 @@ Expected validation outputs:
 ### High-Level Architecture
 - UI pages: home (input), results (single), compare (dual), about/disclaimer, feedback.
 - API endpoints: `/api/calc`, `/api/compare`, `/api/feedback`.
-- Data model (initial): `Country`, `TaxBracket`, `DatasetVersion`, `Feedback`.
+- Data model (v1):
+  - Country (id, name, iso2, region, created_at)
+  - TaxYear (id, country_id → Country, year, effective_from, effective_to, source_name, source_url, notes, created_at)
+  - FilingStatus (id, code, label, description)
+  - TaxSchedule (id, tax_year_id → TaxYear, filing_status_id → FilingStatus, resident_type, description, created_at)
+  - TaxBracket (id, schedule_id → TaxSchedule, lower_bound, upper_bound, rate, method, notes)
+  - AllowanceRule (id, schedule_id → TaxSchedule, type, amount, phaseout_start, phaseout_rate, phaseout_cap, formula_ref, notes, created_at)
+  - SocialContribution (id, schedule_id → TaxSchedule, name, rate, income_floor, income_ceiling, notes)
+  - Feedback (id, email, country_from_id → Country, country_to_id → Country, comment, created_at)
 - Config-driven calculators per country (function map), all conforming to a shared interface.
 
 ---
@@ -143,7 +151,6 @@ Compliance and UX:
 ## Critical Review: Plan Spec Shortcomings
 The planning spec provides clear direction but leaves several areas under-specified for execution:
 
-- Data scope and assumptions: Lacks explicit inclusion/exclusion rules (e.g., handling of allowances, social contributions, filing status, currency conversion). Remedy: define per-country calculation assumptions and test fixtures.
 - Source governance: No explicit list of authoritative sources, licenses, or update cadence. Remedy: add a source registry, license notes, and quarterly update policy.
 - Accuracy guarantees: No target error bounds or validation method against reference calculators. Remedy: set tolerance thresholds and create comparison tests on known examples.
 - Non-functional requirements: Performance, accessibility, and SEO budgets not specified. Remedy: adopt lighthouse/a11y targets and CWV goals.
@@ -154,4 +161,3 @@ The planning spec provides clear direction but leaves several areas under-specif
 - Timeline/resources: No sequencing or resource assumptions. Remedy: adopt the lightweight sequence above and note solo-project constraints.
 
 These refinements make the plan execution-ready while preserving the MVP’s focused scope.
-
