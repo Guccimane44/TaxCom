@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-gray-900 antialiased;
+}
+
+a {
+  @apply text-blue-600 hover:underline;
+}
+
+main {
+  @apply container mx-auto px-4 py-8;
+}
+

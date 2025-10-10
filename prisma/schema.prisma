@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ResidentType {
+  RESIDENT
+  NONRESIDENT
+}
+
+enum RateMethod {
+  MARGINAL
+  FLAT
+}
+
+enum AllowanceType {
+  PERSONAL_ALLOWANCE
+  STANDARD_DEDUCTION
+  OTHER
+}
+
+model Country {
+  id         Int        @id @default(autoincrement())
+  name       String
+  iso2       String     @unique
+  region     String
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  taxYears   TaxYear[]
+  feedbackFrom Feedback[] @relation("FeedbackFromCountry")
+  feedbackTo   Feedback[] @relation("FeedbackToCountry")
+}
+
+model TaxYear {
+  id           Int       @id @default(autoincrement())
+  countryId    Int       @map("country_id")
+  year         Int
+  effectiveFrom DateTime @map("effective_from")
+  effectiveTo   DateTime? @map("effective_to")
+  sourceName   String    @map("source_name")
+  sourceUrl    String    @map("source_url")
+  notes        String?
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  country    Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  schedules  TaxSchedule[]
+
+  @@unique([countryId, year])
+}
+
+model FilingStatus {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  label       String
+  description String?
+
+  schedules   TaxSchedule[]
+}
+
+model TaxSchedule {
+  id              Int           @id @default(autoincrement())
+  taxYearId       Int           @map("tax_year_id")
+  filingStatusId  Int           @map("filing_status_id")
+  residentType    ResidentType  @map("resident_type")
+  description     String?
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  taxYear      TaxYear      @relation(fields: [taxYearId], references: [id], onDelete: Cascade)
+  filingStatus FilingStatus @relation(fields: [filingStatusId], references: [id])
+  brackets     TaxBracket[]
+  allowances   AllowanceRule[]
+  contributions SocialContribution[]
+
+  @@unique([taxYearId, filingStatusId, residentType])
+}
+
+model TaxBracket {
+  id          Int        @id @default(autoincrement())
+  scheduleId  Int        @map("schedule_id")
+  lowerBound  Decimal    @map("lower_bound")
+  upperBound  Decimal?   @map("upper_bound")
+  rate        Decimal
+  method      RateMethod
+  notes       String?
+
+  schedule    TaxSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+}
+
+model AllowanceRule {
+  id            Int           @id @default(autoincrement())
+  scheduleId    Int           @map("schedule_id")
+  type          AllowanceType
+  amount        Decimal
+  phaseoutStart Decimal?      @map("phaseout_start")
+  phaseoutRate  Decimal?      @map("phaseout_rate")
+  phaseoutCap   Decimal?      @map("phaseout_cap")
+  formulaRef    String?       @map("formula_ref")
+  notes         String?
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  schedule      TaxSchedule   @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+}
+
+model SocialContribution {
+  id           Int        @id @default(autoincrement())
+  scheduleId   Int        @map("schedule_id")
+  name         String
+  rate         Decimal
+  incomeFloor  Decimal?   @map("income_floor")
+  incomeCeiling Decimal?  @map("income_ceiling")
+  notes        String?
+
+  schedule     TaxSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+}
+
+model Feedback {
+  id            Int       @id @default(autoincrement())
+  email         String
+  countryFromId Int       @map("country_from_id")
+  countryToId   Int       @map("country_to_id")
+  comment       String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  countryFrom   Country   @relation("FeedbackFromCountry", fields: [countryFromId], references: [id])
+  countryTo     Country   @relation("FeedbackToCountry", fields: [countryToId], references: [id])
+}
+

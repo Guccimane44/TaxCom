@@ -1,0 +1,12 @@
+node_modules
+.next
+.env
+.env.local
+.env.test
+coverage
+playwright-report
+test-results
+*.log
+pnpm-lock.yaml
+dist
+prisma/*.db
