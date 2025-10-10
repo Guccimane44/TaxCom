@@ -161,3 +161,44 @@ The planning spec provides clear direction but leaves several areas under-specif
 - Timeline/resources: No sequencing or resource assumptions. Remedy: adopt the lightweight sequence above and note solo-project constraints.
 
 These refinements make the plan execution-ready while preserving the MVP’s focused scope.
+
+---
+
+## Decision Log
+
+**Purpose:**  
+Record key project and design decisions, including rationale and impact.  
+Each entry should be timestamped and linked to related commits, issues, or design documents when possible.
+
+| Date | Decision | Rationale | Impact |
+|------|-----------|------------|--------|
+| 2025-10-09 | Adopt advertising-based monetization over subscription | Broader reach, higher CPM potential, simpler UX | Influences architecture (no paywall, lighter auth) |
+| 2025-10-10 | Region replaces continent in Country table | More meaningful groupings (e.g., Nordic, Middle East) | Simplifies filtering logic |
+| — | — | — | — |
+
+*(Continue logging as development progresses.)*
+
+---
+
+## Surprises & Discoveries
+
+**Purpose:**  
+Capture unexpected findings, insights, or changes in understanding during research, design, or testing.
+
+| Date | Discovery | Description / Impact |
+|------|------------|----------------------|
+| TBD | — | — |
+| — | — | — |
+
+**Examples of future entries:**  
+- “OECD dataset missing detailed tax brackets for year 2024 → fallback to government PDF.”  
+- “User feedback showed confusion about ‘effective tax rate’ label → renamed to ‘You Keep.’”  
+- “Playwright tests exposed performance bottleneck in chart rendering → optimized rendering pipeline.”
+
+---
+
+## Maintenance Notes
+Both the **Decision Log** and **Surprises & Discoveries** sections are living records.  
+- Update them as events occur — treat them as append-only.  
+- Major decisions should also appear as Git commits or issues referencing these entries.  
+- At the end of the MVP, they form part of your retrospective.
