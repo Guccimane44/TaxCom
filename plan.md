@@ -164,6 +164,26 @@ These refinements make the plan execution-ready while preserving the MVP’s foc
 
 ---
 
+## Progress Log
+
+**Purpose:**  
+Track development progress, iterations, and milestone completions over time.  
+Entries should reflect meaningful updates: new features, fixes, data imports, or shifts in scope.  
+
+| Date | Milestone / Task | Summary of Change / Outcome | Status | Notes / Next Steps |
+|------|------------------|-----------------------------|---------|--------------------|
+| 2025-10-09 | Initial `plan.md` completed | Defined MVP scope, data model, and architecture. | ✅ Completed | Ready for Codex ingestion. |
+| 2025-10-10 | Country table refinement | Replaced `continent` with `region`; removed `currency_code`. | ✅ Completed | Update schema draft accordingly. |
+| — | — | — | — | — |
+
+**Conventions:**
+- Use emojis or tags to quickly scan: ✅ Completed, 🟡 In Progress, ⏳ Planned, 🚧 Blocked, 💤 Deferred.
+- Link to commits, pull requests, or issues when applicable.
+- Append, never rewrite — this is a chronological record of development.
+
+
+---
+
 ## Decision Log
 
 **Purpose:**  

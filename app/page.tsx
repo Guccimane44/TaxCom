@@ -47,8 +47,8 @@ export default async function HomePage({
             <div className="space-y-3">
               <div className="border rounded p-4">
                 <h3 className="font-medium mb-1">Result</h3>
-                <p className="text-sm text-gray-700">Country: {result.country} • Income: {result.income.toLocaleString()}</p>
-                <p className="text-sm text-gray-700">Tax: {result.tax.toLocaleString()} • Net: {result.net.toLocaleString()} • Effective: {(result.effectiveRate * 100).toFixed(1)}%</p>
+                <p className="text-sm text-gray-700">Country: {result.country} &bull; Income: {result.income.toLocaleString()}</p>
+                <p className="text-sm text-gray-700">Tax: {result.tax.toLocaleString()} &bull; Net: {result.net.toLocaleString()} &bull; Effective: {(result.effectiveRate * 100).toFixed(1)}%</p>
               </div>
               <ChartPreview gross={result.income} tax={result.tax} net={result.net} />
             </div>
@@ -66,3 +66,4 @@ export default async function HomePage({
     </section>
   );
 }
+
