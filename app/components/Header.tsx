@@ -39,7 +39,7 @@ const Header = () => {
             return (
               <Link
                 key={href}
-                href={href}
+                href={href as any}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
                   isActive ? "text-primary" : "text-foreground/80"
                 }`}

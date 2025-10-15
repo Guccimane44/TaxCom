@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Script from 'next/script';
 import CookieBanner from '@/components/CookieBanner';
+import Header from './components/Header';
 
 export const metadata: Metadata = {
   title: 'TaxCom',
@@ -26,16 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           />
         ) : null}
 
-        <header className="border-b">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="/" className="font-semibold">TaxCom</a>
-            <nav className="space-x-4 text-sm">
-              <a href="/compare">Compare</a>
-              <a href="/about">About</a>
-              <a href="/feedback">Feedback</a>
-            </nav>
-          </div>
-        </header>
+        <Header />
 
         <CookieBanner />
         <main>{children}</main>

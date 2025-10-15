@@ -5,15 +5,12 @@ import Image from "next/image";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
 import { Zap, Target, Shield, ArrowRight } from "lucide-react";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import heroImage from "./assets/hero-tax.jpg";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-hero py-20 md:py-32">
