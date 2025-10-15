@@ -1,69 +1,117 @@
-import ChartPreview from '@/components/ChartPreview';
-import Link from 'next/link';
-import { calcAction } from '@/app/actions/calc';
-import { calculateTax } from '@/lib/calculator';
+"use client";
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
-  const incomeParam = typeof searchParams?.income === 'string' ? searchParams?.income : undefined;
-  const countryParam = typeof searchParams?.country === 'string' ? searchParams?.country : undefined;
-  const parsedIncome = incomeParam ? Math.max(0, Number(incomeParam)) : undefined;
-  const country = (countryParam || 'DE').toUpperCase();
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "./components/ui/button";
+import { Card } from "./components/ui/card";
+import { Zap, Target, Shield, ArrowRight } from "lucide-react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import heroImage from "./assets/hero-tax.jpg";
 
-  const result = typeof parsedIncome === 'number' && Number.isFinite(parsedIncome)
-    ? await calculateTax({ income: parsedIncome, country })
-    : undefined;
-
+export default function HomePage() {
   return (
-    <section className="space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">TaxCom</h1>
-        <p className="text-gray-600">Estimate and compare income taxes across countries (MVP).</p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
 
-      <div className="grid md:grid-cols-2 gap-6 items-start">
-        <div className="space-y-4">
-          <h2 className="font-medium">Quick Calculator</h2>
-          <form className="space-y-3" action={calcAction}>
-            <div className="flex items-center gap-3">
-              <label className="w-24 text-sm text-gray-700">Income</label>
-              <input name="income" type="number" min={0} defaultValue={parsedIncome ?? 60000} className="border rounded px-3 py-2 w-full" />
-            </div>
-            <div className="flex items-center gap-3">
-              <label className="w-24 text-sm text-gray-700">Country</label>
-              <select name="country" defaultValue={country} className="border rounded px-3 py-2">
-                <option value="DE">Germany</option>
-                <option value="NL">Netherlands</option>
-              </select>
-            </div>
-            <button className="bg-gray-900 text-white rounded px-4 py-2 text-sm">Calculate</button>
-          </form>
-        </div>
-        <div>
-          {result ? (
-            <div className="space-y-3">
-              <div className="border rounded p-4">
-                <h3 className="font-medium mb-1">Result</h3>
-                <p className="text-sm text-gray-700">Country: {result.country} &bull; Income: {result.income.toLocaleString()}</p>
-                <p className="text-sm text-gray-700">Tax: {result.tax.toLocaleString()} &bull; Net: {result.net.toLocaleString()} &bull; Effective: {(result.effectiveRate * 100).toFixed(1)}%</p>
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-hero py-20 md:py-32">
+          <div className="absolute inset-0 opacity-10">
+            <Image
+              src={heroImage}
+              alt="Tax comparison visualization"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-3xl mx-auto text-center space-y-8 animate-fade-in">
+              <h1 className="text-5xl md:text-6xl font-bold text-white">
+                Compare Income Tax <br className="hidden md:block" />
+                Across Countries
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">
+                Calculate your take-home pay and compare tax rates from around the world.{" "}
+                Fast, accurate, and transparent.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/compare">
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="shadow-soft text-lg px-8"
+                  >
+                    Compare Now
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
               </div>
-              <ChartPreview gross={result.income} tax={result.tax} net={result.net} />
             </div>
-          ) : (
-            <ChartPreview />
-          )}
-        </div>
-      </div>
+          </div>
+        </section>
 
-      <div className="text-sm text-gray-600">
-        <Link href="/compare" className="mr-4">Go to Compare</Link>
-        <Link href="/about" className="mr-4">About</Link>
-        <Link href="/feedback">Feedback</Link>
-      </div>
-    </section>
+        {/* Features Section */}
+        <section className="py-20 bg-gradient-subtle">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16 animate-fade-in">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Why Choose TaxCom?
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                We make international tax comparison simple and reliable.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              {/* Feature 1 */}
+              <Card className="p-8 shadow-card hover:shadow-soft transition-all animate-fade-in">
+                <div className="bg-primary/10 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <Zap className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-3">Lightning Fast</h3>
+                <p className="text-muted-foreground">
+                  Get instant results with our optimized calculator. No waiting, no hassle—
+                  just accurate tax comparisons in seconds.
+                </p>
+              </Card>
+
+              {/* Feature 2 */}
+              <Card
+                className="p-8 shadow-card hover:shadow-soft transition-all animate-fade-in"
+                style={{ animationDelay: "0.1s" }}
+              >
+                <div className="bg-accent/10 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <Target className="h-7 w-7 text-accent" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-3">Highly Accurate</h3>
+                <p className="text-muted-foreground">
+                  Our data is sourced from official government resources and updated regularly
+                  to ensure precision.
+                </p>
+              </Card>
+
+              {/* Feature 3 */}
+              <Card
+                className="p-8 shadow-card hover:shadow-soft transition-all animate-fade-in"
+                style={{ animationDelay: "0.2s" }}
+              >
+                <div className="bg-secondary/10 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <Shield className="h-7 w-7 text-secondary" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-3">100% Transparent</h3>
+                <p className="text-muted-foreground">
+                  See exactly how we calculate your taxes. No hidden formulas, no surprises—
+                  just clear, honest information.
+                </p>
+              </Card>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
-

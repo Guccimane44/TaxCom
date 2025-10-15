@@ -1,4 +1,7 @@
-import { NavLink } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Calculator, Globe } from "lucide-react";
 import {
@@ -9,59 +12,45 @@ import {
 } from "./ui/dropdown-menu";
 
 const Header = () => {
+  const pathname = usePathname();
+
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/compare", label: "Compare" },
+    { href: "/about", label: "About" },
+    { href: "/feedback", label: "Feedback" },
+  ];
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <NavLink to="/" className="flex items-center gap-2 font-semibold text-xl">
+        {/* Brand */}
+        <Link href="/" className="flex items-center gap-2 font-semibold text-xl">
           <Calculator className="h-6 w-6 text-primary" />
           <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             TaxCom
           </span>
-        </NavLink>
-        
+        </Link>
+
+        {/* Navigation Links */}
         <div className="hidden md:flex items-center gap-6">
-          <NavLink 
-            to="/" 
-            className={({ isActive }) => 
-              `text-sm font-medium transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-foreground/80"
-              }`
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink 
-            to="/compare" 
-            className={({ isActive }) => 
-              `text-sm font-medium transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-foreground/80"
-              }`
-            }
-          >
-            Compare
-          </NavLink>
-          <NavLink 
-            to="/about" 
-            className={({ isActive }) => 
-              `text-sm font-medium transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-foreground/80"
-              }`
-            }
-          >
-            About
-          </NavLink>
-          <NavLink 
-            to="/feedback" 
-            className={({ isActive }) => 
-              `text-sm font-medium transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-foreground/80"
-              }`
-            }
-          >
-            Feedback
-          </NavLink>
+          {navLinks.map(({ href, label }) => {
+            const isActive = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive ? "text-primary" : "text-foreground/80"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </div>
 
+        {/* Right Controls */}
         <div className="flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -83,10 +72,8 @@ const Header = () => {
               <DropdownMenuItem>العربية</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          
-          <Button className="shadow-soft">
-            Register
-          </Button>
+
+          <Button className="shadow-soft">Register</Button>
         </div>
       </nav>
     </header>
