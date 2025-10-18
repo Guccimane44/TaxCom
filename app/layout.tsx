@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import Script from 'next/script';
 import CookieBanner from '@/components/CookieBanner';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 export const metadata: Metadata = {
   title: 'TaxCom',
@@ -32,11 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <CookieBanner />
         <main>{children}</main>
 
-        <footer className="border-t">
-          <div className="container mx-auto px-4 py-6 text-sm text-gray-600">
-            <p>Disclaimer: This MVP provides approximate calculations and is not tax advice.</p>
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   );

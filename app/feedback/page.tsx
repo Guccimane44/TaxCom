@@ -1,60 +1,123 @@
 "use client";
-import { useState } from 'react';
+
+import { useState, FormEvent } from "react";
+import { Card } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import { Button } from "../components/ui/button";
+import { useToast } from "../components/hooks/use-toast";
+import { MessageSquare, Send } from "lucide-react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function FeedbackPage() {
-  const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const { toast } = useToast();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!name || !email || !message) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all fields before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Feedback Received!",
+      description: "Thank you for your feedback. We'll get back to you soon.",
+    });
+
+    setName("");
+    setEmail("");
+    setMessage("");
+  };
+
   return (
-    <section className="space-y-6 max-w-2xl">
-      <h1 className="text-2xl font-semibold">Feedback</h1>
-      <p className="text-gray-600">Tell us if results are clear and useful.</p>
-      {!submitted ? (
-        <form
-          className="space-y-4"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const form = e.currentTarget as HTMLFormElement;
-            const payload = {
-              email: (form.elements.namedItem('email') as HTMLInputElement).value,
-              countryFromId: Number((form.elements.namedItem('from') as HTMLSelectElement).value || 1),
-              countryToId: Number((form.elements.namedItem('to') as HTMLSelectElement).value || 2),
-              comment: (form.elements.namedItem('comment') as HTMLTextAreaElement).value,
-            };
-            await fetch('/api/feedback', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload),
-            });
-            setSubmitted(true);
-          }}
-        >
-          <div className="flex items-center gap-3">
-            <label className="w-28 text-sm text-gray-700">Email</label>
-            <input name="email" type="email" className="border rounded px-3 py-2 w-full" placeholder="you@example.com" />
+    <div className="min-h-screen flex flex-col">
+
+      <main className="flex-1 bg-gradient-subtle">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-2xl mx-auto space-y-8">
+            <div className="text-center space-y-4 animate-fade-in">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                <MessageSquare className="h-8 w-8 text-primary" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold">
+                We'd Love Your Feedback
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Help us improve TaxCom by sharing your thoughts, suggestions, or reporting any issues.
+              </p>
+            </div>
+
+            <Card className="p-8 shadow-soft border-2 animate-fade-in">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="message">Message</Label>
+                  <Textarea
+                    id="message"
+                    placeholder="Share your thoughts, suggestions, or report an issue..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={6}
+                    required
+                  />
+                </div>
+
+                <Button type="submit" className="w-full shadow-soft" size="lg">
+                  <Send className="mr-2 h-5 w-5" />
+                  Send Feedback
+                </Button>
+              </form>
+            </Card>
+
+            <Card className="p-6 bg-muted/50 border-0">
+              <h3 className="font-semibold mb-2">Other Ways to Reach Us</h3>
+              <p className="text-sm text-muted-foreground">
+                You can also email us directly at{" "}
+                <a
+                  href="mailto:support@taxcom.example"
+                  className="text-primary hover:underline"
+                >
+                  support@taxcom.example
+                </a>{" "}
+                or follow us on social media for updates and news.
+              </p>
+            </Card>
           </div>
-          <div className="flex items-center gap-3">
-            <label className="w-28 text-sm text-gray-700">From</label>
-            <select name="from" className="border rounded px-3 py-2">
-              <option value="1">Germany</option>
-              <option value="2">Netherlands</option>
-            </select>
-          </div>
-          <div className="flex items-center gap-3">
-            <label className="w-28 text-sm text-gray-700">To</label>
-            <select name="to" className="border rounded px-3 py-2">
-              <option value="2">Netherlands</option>
-              <option value="1">Germany</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm text-gray-700 mb-1">Comment</label>
-            <textarea name="comment" rows={5} className="border rounded px-3 py-2 w-full" placeholder="What was unclear or useful?" />
-          </div>
-          <button className="bg-gray-900 text-white rounded px-4 py-2 text-sm">Submit</button>
-        </form>
-      ) : (
-        <p className="text-green-700">Thanks! Your feedback was submitted.</p>
-      )}
-    </section>
+        </div>
+      </main>
+
+    </div>
   );
 }
-

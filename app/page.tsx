@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
 import { Zap, Target, Shield, ArrowRight } from "lucide-react";
-import Footer from "./components/Footer";
 import heroImage from "./assets/hero-tax.jpg";
 
 export default function HomePage() {
@@ -108,7 +107,6 @@ export default function HomePage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }
