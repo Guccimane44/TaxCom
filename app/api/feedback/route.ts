@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
       // TODO: log error (no-op for MVP without DB)
     }
     return NextResponse.json({ ok: true });
-  } catch (e) {
+  } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }

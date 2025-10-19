@@ -23,7 +23,7 @@ export default function AboutPage() {
               <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
                 TaxCom was founded with a simple goal: to help people understand
-                and compare income tax across different countries. Whether you're
+                and compare income tax across different countries. Whether you&apos;re
                 considering a move abroad, planning your career, or just curious
                 about how tax systems compare globally, we provide accurate,
                 up-to-date information in an easy-to-understand format.

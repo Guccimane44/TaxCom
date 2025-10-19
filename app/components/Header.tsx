@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Calculator, Globe } from "lucide-react";
+import type { Route } from "next";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +15,12 @@ import {
 const Header = () => {
   const pathname = usePathname();
 
-  const navLinks = [
+  type NavLink = {
+    href: Route;   // ✅ use Route, not string
+    label: string;
+  };
+
+  const navLinks: NavLink[] = [
     { href: "/", label: "Home" },
     { href: "/compare", label: "Compare" },
     { href: "/about", label: "About" },
@@ -39,7 +45,7 @@ const Header = () => {
             return (
               <Link
                 key={href}
-                href={href as any}
+                href={href}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
                   isActive ? "text-primary" : "text-foreground/80"
                 }`}

@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     const result = await calculateTax({ income, country });
     return NextResponse.json(result);
   } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }

@@ -12,7 +12,8 @@ export async function POST(req: NextRequest) {
       calculateTax({ income, country: b }),
     ]);
     return NextResponse.json({ a: resA, b: resB });
-  } catch (e) {
+  } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }
